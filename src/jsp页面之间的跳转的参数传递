@@ -1,0 +1,9 @@
+如果jsp跳转jsp 不经过servlet
+这样写
+当前页面 和传递参数
+<a href="views/manage/furn_add.jsp?pageNo=${requestScope.page.pageNo}">添加家具</a>
+
+目标页面和接受参数
+
+
+

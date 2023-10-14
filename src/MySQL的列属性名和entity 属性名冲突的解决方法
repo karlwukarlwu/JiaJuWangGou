@@ -1,0 +1,13 @@
+mysql 的列属性名和entity 属性名冲突的解决方法
+
+public class FurnDAOImp extends BasicDao<Furn> implements FurnDAO {
+
+    @Override
+    public List<Furn> queryAllFurn() {
+        String sql = "select `id`,`name`,`maker`,`price`,`sales`,`stock`,`img_path`imgPath from furn";
+        List<Furn> furns = queryList(sql, Furn.class);
+        return furns;
+    }
+}
+  String sql = "select `id`,`name`,`price`,`sales`,`stock`,`img_path`imgPath from furn";
+  `img_path`imgPath sql语句属性名后面写上entity的属性名

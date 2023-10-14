@@ -1,0 +1,24 @@
+参考uploadAndDownload那个文件夹的代码 里面有详细的注释
+
+
+
+是的，这两个方法有区别，并且它们用于不同的目的。让我们详细地看看这两个方法：
+
+fileItem.getFieldName():
+
+这个方法返回FileItem对象的字段名，也就是在HTTP表单中<input>标签的name属性值。
+示例：对于表单字段<input type="text" name="username">，getFieldName()方法将返回"username"。
+fileItem.getString("utf-8"):
+
+这个方法用于获取FileItem对象的值，并将其转化为一个字符串，使用指定的字符编码（在此例中是"utf-8"）。
+对于一个普通的文本字段，这将返回该字段的值。但对于一个文件上传字段，这会返回文件的内容作为一个字符串（通常，获取文件内容使用其他方法更为合适，如getInputStream()）。
+示例：对于表单字段<input type="text" name="username" value="JohnDoe">，getString("utf-8")方法将返回"JohnDoe"。
+总结：
+
+getFieldName()用于获取字段的名称。
+getString("utf-8")用于获取字段的值，并将其转化为一个使用指定编码的字符串。
+在处理文件上传和表单数据时，通常需要两者结合使用，首先通过getFieldName()判断正在处理哪个字段，然后使用getString("utf-8")或其他相应的方法来处理该字段的值。
+
+
+
+

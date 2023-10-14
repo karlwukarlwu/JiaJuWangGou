@@ -1,0 +1,26 @@
+Failed to start component [StandardEngine[Catalina].
+
+web.xml servlet mapping配置的有问题 可能是网址少/或者多了一个/
+
+关于管理员和普通用户分表问题
+    如果管理员和普通用户 鉴权模式一样，可以用同一张表
+    如果管理员和普通用户 鉴权模式不一样， 使用两张表
+
+
+idea 关掉窗口 ctrl+f4
+
+网页出现乱码 jsp没有设置文件头
+
+
+
+如何通过页面和servlet交互
+通过 href跳转 调用方法写入url
+     <a href="manage/furnServlet?action=list">家居管理</a>
+
+中文乱码问题
+  //解决中文乱码问题
+  //在最基础的反射 basicServlet 中加入
+        req.setCharacterEncoding("UTF-8");
+
+快速检索
+ctrl+f

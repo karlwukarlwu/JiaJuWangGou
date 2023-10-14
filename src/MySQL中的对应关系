@@ -1,0 +1,6 @@
+Decimal 对应的Java中的 BigDecimal
+DATETIME 对应的Java中的 Date 用util 包下面的那个
+varchar 对应的Java中的 String
+tinyint 对应的Java中的 Integer
+int 对应的Java中的 Integer
+double 对应的Java中的 Double

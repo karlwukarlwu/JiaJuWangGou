@@ -1,0 +1,42 @@
+问题的描述
+当您在 AJAX 请求中使用请求转发（request forwarding）或重定向（redirection），
+结果可能并不是您预期的。
+这是因为 AJAX 请求是在背景中异步执行的，
+它不会像常规浏览器请求那样直接改变浏览器的地址或重新加载页面。
+我们需要手动跳转有的时候
+
+
+用这个来确定
+
+public class WebUtils {
+    public static boolean isAjaxRequest(javax.servlet.http.HttpServletRequest request) {
+        String header = request.getHeader("X-Requested-With");
+        return "XMLHttpRequest".equals(header);
+    }
+}
+当有了这个工具类 我们就可以确定请求是不是Ajax请求
+
+
+搭配对应的servlet逻辑
+if(member==null&&admin==null){
+            正常的 请求 我们直接跳转到登录页面
+                if(!WebUtils.isAjaxRequest(request)){
+                    request.getRequestDispatcher("/views/member/login.jsp").forward(servletRequest,servletResponse);
+                    return;
+            如果是Ajax请求 我们就返回一个json数据
+            里面包含url 在前端通过js搭配window.location.href来跳转到登录页面
+                }else {
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("url","views/member/login.jsp");
+                    String json = new Gson().toJson(resultMap);
+                    servletResponse.getWriter().write(json);
+                }
+
+前端
+  if (data.url == undefined) {
+
+                        var totalCount = data.totalCount;
+                        $("span.header-action-num").text(totalCount)
+                    }else {
+                        location.href = data.url
+                    }

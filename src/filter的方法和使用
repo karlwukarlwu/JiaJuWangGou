@@ -1,0 +1,172 @@
+### Filter的基本概念：
+
+1. **生命周期**：与Servlet相似，Filter也有它的生命周期。主要的方法有`init()`、`doFilter()`、和`destroy()`。
+
+2. **配置和映射**：要使用Filter，首先需要在`web.xml`中进行配置，指定它的类路径和要拦截的URL模式。
+
+3. **执行顺序**：如果有多个Filter都映射到了同一个URL，那么它们的执行顺序会按照`web.xml`中的声明顺序进行。
+
+### Filter的基本使用：
+
+1. **创建Filter**：首先，创建一个类并实现`javax.servlet.Filter`接口。
+
+   ```java
+   public class MyFilter implements Filter {
+       @Override
+       public void init(FilterConfig filterConfig) throws ServletException {
+           // 初始化代码
+       }
+
+       @Override
+       public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+               throws IOException, ServletException {
+           // 执行前的操作
+           chain.doFilter(request, response);
+           // 执行后的操作
+       }
+
+       @Override
+       public void destroy() {
+           // 销毁时的操作
+       }
+   }
+   ```
+
+2. **配置Filter**：在`web.xml`中进行配置。
+
+   ```xml
+   <filter>
+       <filter-name>myFilter</filter-name>
+       <filter-class>com.example.MyFilter</filter-class>
+   </filter>
+   <filter-mapping>
+       <filter-name>myFilter</filter-name>
+       <url-pattern>/somepath/*</url-pattern>
+   </filter-mapping>
+   ```
+
+3. **使用FilterChain**：在`doFilter`方法中，`FilterChain`对象代表了当前请求的Filter链。调用`chain.doFilter(request, response);`会将请求传递给链中的下一个Filter，或者，如果所有的Filter都已经执行完毕，则传递给目标Servlet。
+
+### 注意事项：
+
+1. 一定要记住在`doFilter`方法中调用`chain.doFilter(request, response);`，否则请求会被阻塞在当前Filter，不会传递给后续的Filter或Servlet。
+
+2. Filter的执行是在Servlet之前和之后，所以它可以用于修改请求和响应的数据。
+
+3. Filter和Servlet的配置是两回事，即使Filter和Servlet在同一个`web.xml`文件中，也不能假设它们的加载和初始化的顺序。
+
+Filter为Java Web应用提供了一种强大的中间件机制，允许开发者在不修改Servlet代码的情况下，进行各种前处理和后处理操作。
+
+filter中的doFilter的使用
+
+Java Servlet 的 `Filter` 接口提供了三个主要的方法，它们负责不同的职责并在不同的生命周期时期被调用。下面是这三个方法的详细介绍：
+
+1. **`init(FilterConfig filterConfig)`:**
+
+    - **描述**：这个方法在 Filter 实例化后被 Servlet 容器（如Tomcat）调用，它只会被调用一次。此方法的主要目的是允许 Filter 执行一次性的初始化。
+
+    - **参数**：
+        - `FilterConfig`：此参数提供了 Filter 的配置信息，它可以用来获取 Filter 的初始化参数、Servlet 上下文等。
+
+    - **使用场景**：
+        - 加载配置或资源，如数据库连接、配置文件等。
+        - 初始化一些只需要设置一次的属性或资源。
+
+    ```java
+    public void init(FilterConfig config) throws ServletException {
+        String myParam = config.getInitParameter("myParamName");
+        // 初始化工作
+    }
+    ```
+
+2. **`doFilter(ServletRequest request, ServletResponse response, FilterChain chain)`:**
+
+    - **描述**：此方法是 Filter 的核心，每当一个请求/响应对匹配到该 Filter 的 URL 模式时，这个方法就会被调用。
+
+    - **参数**：
+        - `ServletRequest`：表示客户端的请求。
+        - `ServletResponse`：表示服务器的响应。
+        - `FilterChain`：代表当前的 Filter 链，调用 `chain.doFilter(request, response);` 将请求传递到链中的下一个 Filter 或目标 Servlet。
+
+    - **使用场景**：
+        - 修改请求头或请求参数。
+        - 权限检查或身份验证。
+        - 记录日志或收集统计数据。
+        - 修改响应头或响应内容。
+
+    ```java
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        // 前处理
+        chain.doFilter(request, response);
+        // 后处理
+    }
+    ```
+
+3. **`destroy()`:**
+
+    - **描述**：此方法在 Filter 的生命周期结束时被调用，即当容器决定移除 Filter 实例之前。通常用于释放 Filter 占用的资源。
+
+    - **参数**：无。
+
+    - **使用场景**：
+        - 关闭打开的资源，如数据库连接、文件流等。
+        - 清理临时数据或缓存。
+
+    ```java
+    public void destroy() {
+        // 清理资源或其他结束操作
+    }
+    ```
+
+filter中的初始值的获取以及排除特定资源的配置
+
+这是一个示例，说明如何为 Filter 定义初始化参数，并如何在 `FilterConfig` 中获取它们：
+
+### 1. 在 `web.xml` 中定义 Filter 以及它的初始化参数：
+
+```xml
+<filter>
+    <filter-name>MyFilter</filter-name>
+    <filter-class>com.example.MyFilter</filter-class>
+    <init-param>
+        <param-name>myParamName</param-name>
+        <param-value>SomeValue</param-value>
+    </init-param>
+    <!-- 可以定义更多的初始化参数... -->
+</filter>
+<filter-mapping>
+    <filter-name>MyFilter</filter-name>
+    <url-pattern>/somepath/*</url-pattern>
+</filter-mapping>
+```
+
+在上面的示例中，我们为名为 "MyFilter" 的 Filter 定义了一个初始化参数 `myParamName`，其值为 "SomeValue"。
+
+### 2. 在 Filter 的 `init` 方法中使用 `FilterConfig` 获取此参数：
+
+```java
+public void init(FilterConfig config) throws ServletException {
+    String myParamValue = config.getInitParameter("myParamName");
+    // 使用参数值进行某些初始化操作
+}
+```
+
+当 Servlet 容器（例如 Tomcat）启动并部署你的 web 应用时，它会读取 `web.xml`，为每个 Filter 创建一个实例，并为其提供一个 `FilterConfig` 对象，该对象包含在 `web.xml` 中定义的所有初始化参数。当 `init` 方法被调用时，你可以使用这些参数来执行一些初始化任务。
+
+特定的功能
+    <!--    过滤器-->
+        <filter>
+            <filter-name>AuthFilter</filter-name>
+            <filter-class>file.filter.AuthFilter</filter-class>
+            <!--        业务逻辑要思考，有些目录下的某些文件举要进行放行，怎么办？-->
+    <!--        用初始值进行过滤-->
+            <init-param>
+                <param-name>excludedUrls</param-name>
+                <param-value>/views/manage/manage_login.jsp,/views/member/login.jsp</param-value>
+            </init-param>
+        </filter>
+        <filter-mapping>
+            <filter-name>AuthFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>

@@ -1,0 +1,15 @@
+跳转逻辑
+    furn_manage加上pageNo的参数->
+        furnServlet(showFurn) 这一步拿到新的pageNo参数->
+        furn_update.jsp 从这里拿到上一个页面传的参数（请求转发）
+            添加了一个隐藏的input标签，用来传递pageNo参数->
+        furnServlet(updateFurn) 这一步拿到新的pageNo参数
+            这一步考虑分页 并带上pageNo参数->
+         resp.sendRedirect(req.getContextPath() + "/manage/furnServlet?action=page&pageNo=" + req.getParameter("pageNo") );
+         将pageNo参数传递给page方法
+         从而跳转到前端页面
+         */
+
+         增加商品和删除商品同修改逻辑
+
+

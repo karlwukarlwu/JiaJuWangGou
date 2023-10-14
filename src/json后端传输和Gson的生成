@@ -1,0 +1,78 @@
+后端返回json到前端
+        resp.getWriter().write(json);
+
+`Gson` 是 Google 提供的一个 Java 库，用于将 Java 对象转换为 JSON 格式的字符串，以及反向的操作。以下介绍了使用 Gson 生成 JSON 字符串并发送到前端的一些常见方法：
+
+1. **基本对象到 JSON**
+
+   使用 Gson，你可以很容易地将一个 Java 对象转换为 JSON 字符串。
+
+   ```java
+   Person person = new Person("Alice", 30);
+   Gson gson = new Gson();
+   String json = gson.toJson(person);
+   ```
+
+2. **List 到 JSON**
+
+   如果你有一个对象的 List，Gson 也可以处理。
+
+   ```java
+   List<Person> people = Arrays.asList(new Person("Alice", 30), new Person("Bob", 25));
+   Gson gson = new Gson();
+   String json = gson.toJson(people);
+   ```
+
+3. **带有自定义日期格式的 JSON**
+
+   你可以为 Gson 实例配置自定义的日期格式。
+
+   ```java
+   GsonBuilder gsonBuilder = new GsonBuilder();
+   gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss");
+   Gson gson = gsonBuilder.create();
+   String json = gson.toJson(someObjectWithDate);
+   ```
+
+4. **排除某些字段**
+
+   使用 `transient` 关键字，你可以在类定义中排除不想被序列化的字段。
+
+   ```java
+   public class Person {
+       private String name;
+       transient private int age;  // This field will be ignored during serialization
+   }
+   ```
+
+   或者使用 `ExclusionStrategy` 来更灵活地排除字段。
+
+5. **对 JSON 格式化**
+
+   使用 `GsonBuilder` 的 `setPrettyPrinting()` 方法，你可以生成格式化（缩进）的 JSON，使其更易读。
+
+   ```java
+   Gson gson = new GsonBuilder().setPrettyPrinting().create();
+   String json = gson.toJson(someObject);
+   ```
+
+6. **从 JSON 到 Java 对象**
+
+   除了将 Java 对象转换为 JSON，Gson 也可以做反向操作，即从 JSON 字符串转换为 Java 对象。
+
+   ```java
+   String json = "{\"name\":\"Alice\",\"age\":30}";
+   Person person = gson.fromJson(json, Person.class);
+   ```
+
+**发送到前端**:
+
+通常，当你在 Java Web 应用（例如使用 Servlet）中使用 Gson 时，你会将生成的 JSON 字符串发送到前端。例如：
+
+```java
+response.setContentType("application/json");
+response.setCharacterEncoding("UTF-8");
+response.getWriter().write(json);
+```
+
+总的来说，Gson 提供了一个非常灵活和强大的方式来在 Java 对象和 JSON 字符串之间进行转换。上面只是其中的一些基础用法。Gson 还有许多高级特性和配置选项，使其成为 Java 中处理 JSON 的首选库之一。

@@ -1,0 +1,35 @@
+1. 当配置导入的jar包时
+
+ <servlet>
+        <servlet-name>KaptchaServlet</servlet-name>
+        <servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+    </servlet>
+讲讲servlet-class的路径是怎么写的
+
+在 <servlet> 标签中的 <servlet-class> 子标签定义了要运行的 Servlet 类的完全限定名称。这意味着你需要提供该类的完整包路径加上类名。
+
+在你给出的示例中：
+
+<servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+com.google.code.kaptcha.servlet.KaptchaServlet 是 KaptchaServlet 类的完全限定名称。这里的结构如下：
+
+com.google.code.kaptcha.servlet 是该类的包名。
+KaptchaServlet 是类名。
+当服务器（如 Tomcat）启动并加载这个配置时，它会尝试找到该路径对应的类文件，并加载它作为 Servlet。因此，这个类必须在你的项目的 classpath 中，并且当你的 web 应用部署到服务器时，它必须是可访问的。
+
+通常，你的项目的 .java 源文件会被编译为 .class 文件，并放在 WEB-INF/classes 目录下，按照它们的包结构进行组织。如果你使用的是库（如 JAR 文件），则这些 JAR 文件通常放在 WEB-INF/lib 目录下。
+
+因此，对于上述的 KaptchaServlet 类，它可能来自一个名为 kaptcha.jar 的库文件，这个文件应该被放置在你的 web 应用的 WEB-INF/lib 目录中。或者，如果它是直接编译的类文件，你应该能在 WEB-INF/classes/com/google/code/kaptcha/servlet/ 目录下找到 KaptchaServlet.class 文件。
+
+
+2.  为什么不用加上web-inf/lib
+
+当你在 <servlet-class> 中指定 Servlet 类的完全限定名称时，你不需要加上 WEB-INF/lib 或 WEB-INF/classes 的路径前缀，原因如下：
+
+约定：Servlet 容器（例如 Tomcat）按照 Servlet 规范的约定，默认知道类文件可以位于 WEB-INF/classes 目录中，以及 JAR 文件可以位于 WEB-INF/lib 目录中。因此，当它读取 web.xml 文件并尝试加载一个 Servlet 类时，它会自动查找这两个位置。
+
+Classpath：在 Java 中，类加载器使用 classpath 来查找和加载类。对于 web 应用，WEB-INF/classes 和 WEB-INF/lib/*.jar 的路径都自动添加到了应用的 classpath 中。因此，当你提供一个类的完全限定名称，Servlet 容器可以轻松地在 classpath 中找到并加载它。
+
+抽象：<servlet-class> 中只需要类的完全限定名称，这提供了一个清晰的抽象。你不需要关心类实际存储在文件系统的哪个位置，只需要知道它在 Java 包结构中的位置。
+
+简而言之，通过使用完全限定名称（即包名 + 类名）而不是文件系统路径，Servlet 规范提供了一种更简洁、更抽象的方式来引用和加载 Servlet 类，而不必担心它们在文件系统上的实际位置。

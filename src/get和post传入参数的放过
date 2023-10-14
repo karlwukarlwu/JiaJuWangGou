@@ -1,0 +1,12 @@
+当请求是get的时候
+    比如说你通过a 标签发送的请求
+        你需要在跳转的url里面手动加上你要传入的参数
+        因为是get请求，所以参数是在url里面的 ?action=showFurn&id=${furn.id}
+        <a href="manage/furnServlet?action=showFurn&id=${furn.id}"><i class="icon-pencil"></i></a>
+当请求是post表单的时候
+    比如你通过form action 进行网页跳转
+         <form action="#" method="post">
+            <input type="hidden" name="action" value="addFurn">
+            <input type="submit" value="添加家具">
+        </form>
+     这个时候你需要在form里面加上一个隐藏的input标签 通过这样提交你想要添加的参数

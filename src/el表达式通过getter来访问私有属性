@@ -1,0 +1,11 @@
+你展示的这一行代码：
+
+```html
+<span class="header-action-num">${sessionScope.cart.totalCount}</span>
+```
+
+使用了JSP（JavaServer Pages）的表达式语言 (EL)。在JSP中，表达式语言允许你直接访问Web应用程序的各种作用域属性，如`pageScope`、`requestScope`、`sessionScope`和`applicationScope`。在这里，代码正在尝试访问在`session`作用域中的`cart`对象的`totalCount`属性。
+
+至于“私有属性”一词，Java的私有属性指的是使用`private`修饰符声明的属性。这些属性不能从外部类直接访问。然而，当你在JSP中使用表达式语言访问一个JavaBean的属性时，实际上你是通过它的公开的`getter`方法（如`getTotalCount()`）来访问的，而不是直接访问属性本身。因此，如果`cart`对象的`totalCount`属性是私有的，那么JSP的EL实际上是在背后调用`cart.getTotalCount()`来获取值。
+
+这就是为什么在JSP中，你可以使用表达式语言来“访问”私有属性：实际上你是在通过JavaBean的公开`getter`方法来获取它们的值。如果没有对应的`getter`方法，那么你将无法通过JSP的EL访问该私有属性。

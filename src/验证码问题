@@ -1,0 +1,54 @@
+kaptchaServlet
+可以生成验证码
+还有其他的方法，然后将验证码文本保存在session中，然后在登录的时候进行验证
+这个要用kaptcha的jar包 并在web.xml中配置
+
+验证码的刷新并不是跳转到另一个网页 而是图片的src刷新 跳转到导入包的servlet
+   <input type="text" id="code" name="code" style="width: 50%"
+    placeholder="验证码"/>　　<img alt="" id ="codeImg" src="kaptchaServlet">
+   <div class="button-box">
+
+   如果单纯这样写 会因为图片缓存导致不刷新 前端加上一个js
+   $("#codeImg").click(function (){
+                   // alert("点击了图片");
+                   // 为什么要加上math.random()?
+                   // 因为浏览器会缓存图片，如果不加上随机数，那么图片就会被缓存，不会重新加载
+                   // 或者你加上个new Date()也可以
+                   this.src = "kaptchaServlet?d="+new Date()
+                   // $(this).attr("src","kaptchaServlet?"+Math.random());
+    })
+```
+
+  req.getSession().setAttribute(this.sessionKeyValue, capText);
+  req.getSession().setAttribute(this.sessionKeyDateValue, new Date());
+
+  当你想拿到session中的默认值时候
+  这里是验证码默认的常量值
+  public class Constants {
+      public static final String KAPTCHA_SESSION_KEY = "KAPTCHA_SESSION_KEY";
+      public static final String KAPTCHA_SESSION_DATE = "KAPTCHA_SESSION_DATE";
+      public static final String KAPTCHA_SESSION_CONFIG_KEY = "kaptcha.session.key";
+      public static final String KAPTCHA_SESSION_CONFIG_DATE = "kaptcha.session.date";
+      public static final String KAPTCHA_BORDER = "kaptcha.border";
+      public static final String KAPTCHA_BORDER_COLOR = "kaptcha.border.color";
+      public static final String KAPTCHA_BORDER_THICKNESS = "kaptcha.border.thickness";
+      public static final String KAPTCHA_NOISE_COLOR = "kaptcha.noise.color";
+      public static final String KAPTCHA_NOISE_IMPL = "kaptcha.noise.impl";
+      public static final String KAPTCHA_OBSCURIFICATOR_IMPL = "kaptcha.obscurificator.impl";
+      public static final String KAPTCHA_PRODUCER_IMPL = "kaptcha.producer.impl";
+      public static final String KAPTCHA_TEXTPRODUCER_IMPL = "kaptcha.textproducer.impl";
+      public static final String KAPTCHA_TEXTPRODUCER_CHAR_STRING = "kaptcha.textproducer.char.string";
+      public static final String KAPTCHA_TEXTPRODUCER_CHAR_LENGTH = "kaptcha.textproducer.char.length";
+      public static final String KAPTCHA_TEXTPRODUCER_FONT_NAMES = "kaptcha.textproducer.font.names";
+      public static final String KAPTCHA_TEXTPRODUCER_FONT_COLOR = "kaptcha.textproducer.font.color";
+      public static final String KAPTCHA_TEXTPRODUCER_FONT_SIZE = "kaptcha.textproducer.font.size";
+      public static final String KAPTCHA_TEXTPRODUCER_CHAR_SPACE = "kaptcha.textproducer.char.space";
+      public static final String KAPTCHA_WORDRENDERER_IMPL = "kaptcha.word.impl";
+      public static final String KAPTCHA_BACKGROUND_IMPL = "kaptcha.background.impl";
+      public static final String KAPTCHA_BACKGROUND_CLR_FROM = "kaptcha.background.clear.from";
+      public static final String KAPTCHA_BACKGROUND_CLR_TO = "kaptcha.background.clear.to";
+      public static final String KAPTCHA_IMAGE_WIDTH = "kaptcha.image.width";
+      public static final String KAPTCHA_IMAGE_HEIGHT = "kaptcha.image.height";
+
+      public Constants() {
+      }

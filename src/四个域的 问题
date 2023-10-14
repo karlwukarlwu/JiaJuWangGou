@@ -1,0 +1,46 @@
+在 Java Web 开发中，尤其是使用 Servlet 和 JSP，`request` 对象是用于代表 HTTP 请求的。这个对象有几个 "域"（或称作 "范围"）用于存储数据，这些数据可以在不同的生命周期和范围内访问。但当我们说到 "request 的域"，通常是指 `request` 作为一个存储区域相对于其他存储区域（如 `session`、`application` 和 `page` 域）。
+
+这里是主要的四个域及其描述：
+
+1. **Page 域**:
+   - 存活期：JSP 页面的生命周期。
+   - 使用场景：只在当前页面有效。一旦页面处理完毕，page 域中的数据就会被销毁。
+   - 使用方法：
+     ```java
+     pageContext.setAttribute("key", value);
+     Object value = pageContext.getAttribute("key");
+     ```
+
+2. **Request 域**:
+   - 存活期：一个客户端的请求周期。
+   - 使用场景：当需要将数据从一个 Servlet 传递给另一个 Servlet 或 JSP（例如，使用请求转发）时，使用 request 域。
+   - 使用方法：
+     ```java
+     request.setAttribute("key", value);
+     Object value = request.getAttribute("key");
+     ```
+
+3. **Session 域**:
+   - 存活期：一次会话期间，从用户首次访问网站直到会话超时或被显式地销毁。
+   - 使用场景：用于存储与特定用户相关的信息，例如登录状态、用户偏好等。
+   - 使用方法：
+     ```java
+     session.setAttribute("key", value);
+     Object value = session.getAttribute("key");
+     ```
+
+4. **Application 域**:
+   - 存活期：从 Web 应用启动到 Web 应用销毁。
+   - 使用场景：用于存储整个 Web 应用的共享数据，例如配置信息、统计数据等。
+   - 使用方法：
+     ```java
+     getServletContext().setAttribute("key", value);
+     Object value = getServletContext().getAttribute("key");
+     ```
+
+每个域有其特定的生命周期和使用场景。选择哪个域通常取决于你想如何共享数据以及数据需要存活的时长。
+
+这个主要是前后端交互了
+//涉及到el这些东西
+前端用 ${requestScope.msg}--%>
+后端用 request.setAttribute("msg", "Hello World!");

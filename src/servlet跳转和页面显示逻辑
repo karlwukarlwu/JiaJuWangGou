@@ -1,0 +1,35 @@
+
+前端设置好跳转的url
+通过前端跳到后端
+    后端当处理完数据以后
+    把数据放到域对象中
+    然后再跳转到前端
+    req.getRequestDispatcher("/views/manage/furn_manage.jsp").forward(req, resp);
+    为什么跳转不设置地址栏
+        因为这个是请求转发
+    为什么可以显示数据
+        因为前端页面的数据是搭配上面的域对象
+    为什么每天点击前端不同的按钮有不同的url
+        因为这些url并不是从后端跳转的
+            这些url是前端设置好的
+            后端只是拿到了数据进行回显
+ //分页
+    protected void page(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //1.获取请求的参数 pageNo 和 pageSize pageNo和pageSize 从前端获取
+        int pageNo = DataUtils.parseInt(req.getParameter("pageNo"), 1);
+        int pageSize = DataUtils.parseInt(req.getParameter("pageSize"), Page.PAGE_SIZE);
+        //2.调用FurnService.page(pageNo,pageSize):Page对象
+        Page<Furn> page = furnService.page(pageNo, pageSize);
+        System.out.println(page);
+//        page.setUrl("manage/furnServlet?action=page");
+        //3.保存Page对象到Request域中
+        req.setAttribute("page", page);
+        //4.请求转发到pages/manager/furn_manager.jsp页面
+        //为什么要转发到这个页面？而且没有url 因为实际上跳转的url已经在前端设置好了
+        //请求转发并不改变url
+        //这里跳转回来的目的是回显数据 而真正的定向是在前端进行的数据拼接
+        //http: localhost:8080/shopping/manage/furnServlet?action=page&pageNo=4
+//       这个是前端写好的
+        req.getRequestDispatcher("/views/manage/furn_manage.jsp").forward(req, resp);
+        // 这个只是显示单纯的页面 这个搭配上面的域对象才是完整的有数据的页面
+    }

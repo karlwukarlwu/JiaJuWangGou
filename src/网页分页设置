@@ -1,0 +1,25 @@
+网页的分页导航怎么写的？
+将页面进行抽象
+    pageSize?
+    pageNum?
+    total?
+在手动输入url进行跳转的过程中
+    总数据来自数据库
+    总页数是根据总数据和每页显示的条数计算出来的
+    每页多少的信息是写死的
+
+    每页显示的数据是通过当前页和每页显示的条数计算出来的，通过泛型和list集合来实现
+        封装成page的一个属性 List<T> list
+        通过sql 语句搭配limit关键字来实现 select * from user limit 0,5
+        通过在furnService这一步进行赋值
+                    int begin = (pageNo - 1) * pageSize;//从第几条记录开始获取
+                    List<Furn> pageItems = furnDAO.getPageItems(begin, pageSize);
+                    furnPage.setItems(pageItems);
+
+                    return furnPage;
+
+前端改地址的逻辑是
+     <li><a href="manage/furnServlet?action=page&pageNo=${requestScope.page.pageNo+1}">下页</a></li>
+     这样每次拿到的是当前的pageNo  但是因为pageNo 在点击下一页的时候加一
+     因此下一次从从url的参数传入的时候 就是当前的pageNo+1
+     pageNo的改变是通过url传入参数的变化而变化的

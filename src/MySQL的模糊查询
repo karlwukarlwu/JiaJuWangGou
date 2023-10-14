@@ -1,0 +1,7 @@
+java段这样和数据库交互
+ @Override
+    public int getTotalRowByName(String name) {
+        String sql = "select count(*) from `furn` where `name` like ?";
+        Number number = (Number) queryScalar(sql, "%" + name + "%");
+        return number.intValue();
+    }

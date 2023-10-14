@@ -1,0 +1,7 @@
+
+
+cartItem 1                         orderItem 1
+cartItem 2 -->  cart1 --> 结账 --> orderItem 2 --->order1
+cartItem 3                         orderItem 3
+                                                   order2--> member1
+                                                   order3

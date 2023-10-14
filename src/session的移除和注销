@@ -1,0 +1,46 @@
+1. Session
+在 servlet 中，可以通过 HttpServletRequest 对象访问 Session。
+
+创建或获取 Session：
+
+HttpSession session = request.getSession(true);  // true 表示如果 session 不存在就创建一个新的
+设置属性到 Session：
+
+session.setAttribute("username", "ChatGPT");
+从 Session 获取属性：
+
+String username = (String) session.getAttribute("username");
+销毁 Session：
+
+session.invalidate();
+
+2.
+你可以在一个 session 中设置多个键值对。HttpSession 提供了 setAttribute(String name, Object value) 方法来允许你存储对象，并使用 getAttribute(String name) 方法来检索它们。每个存储的对象都由一个字符串名称（key）标识。
+
+下面是一个简单的示例，展示了如何在一个 session 中存储和检索多个键值对：
+
+// 创建或获取 session
+HttpSession session = request.getSession();
+
+// 存储多个键值对
+session.setAttribute("username", "ChatGPT");
+session.setAttribute("email", "chatgpt@example.com");
+session.setAttribute("age", 25);
+
+// 从 session 检索数据
+String username = (String) session.getAttribute("username");
+String email = (String) session.getAttribute("email");
+int age = (Integer) session.getAttribute("age");
+你可以设置任意数量的键值对，只要服务器的内存允许。但是，需要注意的是，session 数据存储在服务器内存中（除非你配置了其他的 session 管理机制，如基于数据库的 session 管理），因此大量的 session 数据可能会影响服务器性能。因此，最好只在 session 中存储必要的数据，并尽量确保每个数据项的大小不会太大。
+
+3.
+你可以使 session 中的某个键值对失效。HttpSession 提供了 removeAttribute(String name) 方法，允许你删除指定名称（key）的对象。
+
+例如，如果你想删除上面示例中的 "username" 键值对，你可以这样做：
+
+session.removeAttribute("username");
+执行上述代码后，"username" 键值对将从 session 中删除。如果之后你尝试使用 session.getAttribute("username")，它将返回 null。
+
+需要注意的是，removeAttribute 只会删除 session 中的特定键值对，而不会影响 session 中的其他数据。如果你想删除 session 中的所有数据，你可以使用 session.invalidate() 方法，但这将销毁整个 session，而不仅仅是其中的一部分数据。
+
+

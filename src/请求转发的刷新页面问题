@@ -1,0 +1,11 @@
+当我们用getRequestDispatcher()方法进行请求转发的时候 每一次刷新都会重新请求一次servlet
+        //而重定向则不会
+        //request.getRequestDispatcher("/index.jsp").forward(request,response);
+        response.sendRedirect("/index.jsp");
+    }
+}
+这种情况在添加家具的过程中会因为反复刷新servlet而造成多次添加 因此在添加家具，进行支付等情况下需要进行重定向
+```
+
+个人认为 设计到查的业务可以用请求转发
+设计到增删改的业务可以用重定向 因为重定向以后刷新显示的是查询的网页 而不是操作+查询

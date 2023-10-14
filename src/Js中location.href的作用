@@ -1,0 +1,44 @@
+`location.href` 是 JavaScript 中的一个属性，它表示当前浏览器窗口或标签中显示的文档的 URL。该属性是 `window.location` 对象的一部分，通常简写为 `location`。你可以使用这个属性来获取或设置当前页面的 URL。
+
+1. **获取当前页面的 URL**：
+```javascript
+var currentURL = location.href;
+console.log(currentURL);
+```
+
+2. **设置（或更改）当前页面的 URL**：
+当你设置 `location.href` 的值时，浏览器会加载并导航到该 URL。
+```javascript
+location.href = 'https://www.example.com';
+```
+这会使浏览器导航到 "https://www.example.com"。
+
+除了 `href` 属性，`window.location` 还有其他属性（如 `hostname`、`pathname`、`search`、`hash` 等），它们提供了有关当前 URL 的各个部分的详细信息。
+
+//举个例子
+
+当然可以！下面是一个使用 `location.href` 的简单示例。这是一个网页，其中包含一个按钮。当用户点击该按钮时，页面会跳转到 OpenAI 的官方网站。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location.href 示例</title>
+</head>
+<body>
+
+<button onclick="redirectToOpenAI()">点击跳转到 OpenAI</button>
+
+<script>
+    function redirectToOpenAI() {
+        location.href = "https://www.openai.com";
+    }
+</script>
+
+</body>
+</html>
+```
+
+在这个例子中，`<button>` 元素的 `onclick` 属性被设置为 `redirectToOpenAI` 函数。当按钮被点击时，这个函数会执行，并将 `location.href` 设置为 "https://www.openai.com"，从而导致浏览器导航到该网址。

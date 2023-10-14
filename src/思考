@@ -1,0 +1,31 @@
+
+
+为什么 service是注册和登录
+因为网页是注册和登录 service对网页段负责
+
+为什么 dao层是查询和保存
+
+因为service调用dao dao层对数据库负责
+
+    web层/视图层/view
+        --vue react angular..
+
+    service层/业务层/ 完成的网页的任务处理
+        --spring java
+
+    DAO层/数据访问层/数据库的增删改查
+        --mybatis JDBC
+
+    数据库层
+        --mysql oracle
+    进一步引出mvc
+        MVC 是 "Model-View-Controller" 的缩写，即模型-视图-控制器。
+    view ->view
+    controller ->servlet
+    model ->javaBean
+    model 的数据是通过service-dao来获取的（也可以理解为service-dao是在model模型里面）
+    controller ->servlet来调用数据
+    view视图用来展现数据
+
+   分析的时候从view开始分析
+   写代码的时候从数据库开始思考数据库的数据结构往前写

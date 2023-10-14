@@ -1,0 +1,58 @@
+通过已知表生成对应的生成语句
+SHOW CREATE TABLE your_table_name;
+
+
+成员表
+CREATE TABLE `member` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(32) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `email` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1
+
+
+管理员表
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(32) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `email` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1
+
+家具表
+CREATE TABLE `furn` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `maker` varchar(64) NOT NULL,
+  `price` decimal(11,2) NOT NULL,
+  `sales` int(10) unsigned NOT NULL,
+  `stock` int(10) unsigned NOT NULL,
+  `img_path` varchar(256) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=475 DEFAULT CHARSET=utf8
+
+order表
+CREATE TABLE `order`(
+`id` VARCHAR(64) PRIMARY KEY, -- 订单号 因为可能会有英文
+`create_time` DATETIME NOT NULL, -- 订单生成时间 最好写not null
+`price` DECIMAL(11,2) NOT NULL,-- 要参考之前的表的类型 不然可能会匹配不上
+`status` TINYINT NOT NULL,-- 0未发货 1 已发货 2 已结账
+`member_id` INT NOT NULL -- 订单对应的member id
+-- 接下来关联 member表和这个表之间的外键关系
+-- FOREIGN KEY(`member_id`) REFERENCES `member`(`id`)
+-- 随着发展 这样影响效率 用其他办法保证数据一致性
+)CHARSET utf8 ENGINE INNODB
+
+order_item表
+CREATE TABLE `order_item`(
+id INT PRIMARY KEY AUTO_INCREMENT, -- 订单Id
+`name` VARCHAR(64) NOT NUll, -- 家具名
+`price` DECIMAL(11,2) NOT NULL, -- 家具价格
+`count` INT NOT NULL, -- 数量
+`total_price` DECIMAL(11,2) NOT NULL, -- 订单项总价
+`order_id` VARCHAR(64) NOT NULL -- 对应的订单号
+)CHARSET utf8 ENGINE INNODB

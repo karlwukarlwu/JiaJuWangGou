@@ -1,0 +1,22 @@
+如果您有一张包含五个属性的表，但在插入数据时只想为其中四个属性赋值，您可以在 `INSERT` 语句中明确指定要插入的列，并为这些列提供相应的值。
+
+假设您有以下表结构：
+
+```sql
+CREATE TABLE example_table (
+    col1 INT,
+    col2 VARCHAR(50),
+    col3 VARCHAR(50),
+    col4 VARCHAR(50),
+    col5 VARCHAR(50)
+);
+```
+
+如果您不想为 `col3` 添加值，您可以这样写 `INSERT` 语句：
+
+```sql
+INSERT INTO example_table (col1, col2, col4, col5)
+VALUES (1, 'value_for_col2', 'value_for_col4', 'value_for_col5');
+```
+
+在上述语句中，我们明确指定了要为哪些列插入值，并在 `VALUES` 子句中为这些列提供了相应的值。不包含在列列表中的列（在这个例子中是 `col3`）将会被赋予其默认值，如果该列定义了默认值。如果没有默认值，并且该列不允许 `NULL` 值，那么尝试插入数据时会出错。如果该列允许 `NULL` 值，并且没有定义默认值，那么它将被赋予 `NULL`。

@@ -1,0 +1,38 @@
+前端如何拿到有多少页？
+    通过forEach的循环逻辑
+       <%--                    用set标签设置变量--%>
+                    <c:set var="begin" value="1"/>
+                    <c:set var="end" value="${requestScope.page.pageTotalCount}"/>
+
+                    <c:forEach begin="${begin}" end="${end}" var="i">
+    <%--                    如果i是当前页   对当前页面增强 如果不是 则正常显示--%>
+                        <c:if test="${i==requestScope.page.pageNo}">
+                            <li><a class="active" href="manage/furnServlet?action=page&pageNo=${i}">${i}</a></li>
+                        </c:if>
+                        <c:if test="${i!=requestScope.page.pageNo}">
+                            <li><a href="manage/furnServlet?action=page&pageNo=${i}">${i}</a></li>
+                        </c:if>
+                    </c:forEach>
+    forEach 显示出页面所有的页码，然后通过if判断当前页码，如果是当前页码则增强，如果不是则正常显示
+
+前端如何给后端返回当前页
+    当你点击按钮的时候 按钮可以记录当前的页码 当前的页面通过url 赋值给后端
+        后端拿到以后 通过requestScope.setAttrubute("pageNo",pageNo) 传递给前端
+        这样实行交互
+                    <c:if test="${requestScope.page.pageNo<requestScope.page.pageTotalCount}">
+                        <li><a href="manage/furnServlet?action=page&pageNo=${requestScope.page.pageNo+1}">下页</a></li>
+                    </c:if>
+
+最初的跳转如何实现
+ 在manage——menu中
+    <a href="manage/furnServlet?action=page&pageNo=1">家居管理</a>
+  通过这样设置导致 起始页面有一个最初的跳转值
+
+  网页前后页面切换逻辑
+                  <c:if test="${requestScope.page.pageNo<requestScope.page.pageTotalCount}">
+                      <li><a href="manage/furnServlet?action=page&pageNo=${requestScope.page.pageNo+1}">下页</a></li>
+                  </c:if>
+
+                  <c:if test="${requestScope.page.pageNo>1}">
+                      <li><a href="manage/furnServlet?action=page&pageNo=${requestScope.page.pageNo-1}">上页</a></li>
+                  </c:if>

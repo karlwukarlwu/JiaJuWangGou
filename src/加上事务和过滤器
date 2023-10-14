@@ -1,0 +1,31 @@
+如果不用过滤器 直接在事务那里这么写也行
+ String orderId = null;
+        try {
+            //为什么这里可以进行commit 因为实际上所有的sql都在service调用了 这时候已经在一个事务里面了（thread local）
+            orderId = orderService.saveOrder(cart, member.getId());
+//            统一提交
+            JDBCUtils.commitAndClose();
+        } catch (Exception e) {
+            //万一出问题了，回滚
+            JDBCUtils.rollbackAndClose();
+            e.printStackTrace();
+        }
+或者直接上一个filter监听器
+    这里说明 异常是可以参加事务逻辑的
+    e.printStackTrace();
+    搭配 throw new Exception 一起使用
+    这样当异常出现的时候会触发事务监听器的异常监听 从而引发业务回滚
+ 请求过去的时候不拦截 请求结束的时候统一拦截提交
+    这里需要所有的异常都要throw 不能是 printstacktrace 这样会导致事务无法回滚
+
+  @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        try {
+            filterChain.doFilter(servletRequest,servletResponse);
+            //这个filter来的时候不拦截 走的时候统一放行
+            JDBCUtils.commitAndClose();
+        } catch (Exception e) {
+            JDBCUtils.rollbackAndClose();
+            e.printStackTrace();
+        }
+    }

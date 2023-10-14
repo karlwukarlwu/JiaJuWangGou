@@ -1,0 +1,37 @@
+看看就行
+前端写
+    前端开头写
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+forEach枚举
+ <c:forEach items="${requestScope.furns}" var="furn">
+    ${furn.sales}...
+ </c:forEach>
+
+ forEach循环 搭配 c:set
+                 <c:set var="begin" value="1"/>
+                 <c:set var="end" value="${requestScope.page.pageTotalCount}"/>
+
+                 <c:forEach begin="${begin}" end="${end}" var="i">
+ <%--                    如果i是当前页   对当前页面增强 如果不是 则正常显示--%>
+                     <c:if test="${i==requestScope.page.pageNo}">
+                         <li><a class="active" href="manage/furnServlet?action=page&pageNo=${i}">${i}</a></li>
+                     </c:if>
+                     <c:if test="${i!=requestScope.page.pageNo}">
+                         <li><a href="manage/furnServlet?action=page&pageNo=${i}">${i}</a></li>
+                     </c:if>
+                 </c:forEach>
+
+
+if判断
+ <c:if test="${requestScope.page.pageNo<requestScope.page.pageTotalCount}">
+                    <li><a href="manage/furnServlet?action=page&pageNo=${requestScope.page.pageNo+1}">下页</a></li>
+</c:if>
+
+ 这个也是el表达式 只不过上面那个是循环 这个是显示一句话
+ <span >${requestScope.msg}</span>
+
+后端写
+  request.setAttribute("furns", furns);
+用这个包
+taglibs-standard-impl-1.2.1.jar

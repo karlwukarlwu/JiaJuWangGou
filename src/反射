@@ -1,0 +1,67 @@
+`this.getClass().getDeclaredMethod()` 是Java反射API中的一部分，用于检索特定类上声明的特定方法。让我们分解它：
+
+1. **this.getClass()**:
+   - `this` 是Java中的关键字，它引用当前对象。
+   - `getClass()` 是 `Object` 类中的一个方法，它返回当前对象的运行时类。这是Java中每个对象都有的方法。
+
+2. **getDeclaredMethod()**:
+   - 位于 `Class` 类中，用于获取当前类中声明的指定方法。
+   - 与 `getMethod()` 不同，`getDeclaredMethod()` 仅查找当前类中声明的方法，而不查找父类中的方法。
+   - 需要传入两个参数：要查找的方法的名称和该方法的参数类型。
+
+例子：
+
+```java
+public class Sample {
+
+    public void testMethod(String param) {
+        // some code
+    }
+
+    public static void main(String[] args) {
+        Sample obj = new Sample();
+
+        try {
+            // 使用反射API获取testMethod方法
+            Method method = obj.getClass().getDeclaredMethod("testMethod", String.class);
+
+            // 输出方法名
+            System.out.println("Method name: " + method.getName());
+
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+在上面的例子中，我们创建了一个名为 `testMethod` 的方法，并在主方法中使用反射API查找它。
+
+注意：反射通常在必要的情况下使用，例如框架和库中，因为它可能导致性能下降，并增加了代码复杂性。日常编程中很少直接使用反射。
+
+
+反射在javaWeb中的应用：
+
+      protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+            System.out.println("BasicServlet is called");
+            String action = req.getParameter("action");
+    //        System.out.println(action);
+
+            // 使用模板模式 子类调用父类方法 ，
+            // 但是父类方法里面的this还是指向子类 这样通过反射 在父类中拿到子类的方法
+            // 简化多个if-else
+
+            //通过反射 拿到子类的方法
+            try {
+                //子类调用父类方法 父类中的this指向子类，通过反射，拿到子类的方法
+                //对应的子类servlet中分别有 register和login 两个方法 对应的 action （action的值和方法名是一致的，不一致无法反射）
+                Method declaredMethod = this.getClass().getDeclaredMethod(action, HttpServletRequest.class, HttpServletResponse.class);
+                //用反射调用子类的方法
+                declaredMethod.invoke(this, req, resp);
+                System.out.println(this);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }

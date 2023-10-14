@@ -1,0 +1,10 @@
+ $(function () {
+            $("a.deleteCss").click(function () {
+
+                var furnName = $(this).parent().parent().find("td:eq(1)").text();
+                //confirm 是js的一个弹出框
+                // 返回值是true 或者false
+                return confirm("确定要删除" + furnName + "吗？");
+            })
+
+            加上confirm 可以让我们点击的时候跳出一个确认的弹出框 和return 结合使用
